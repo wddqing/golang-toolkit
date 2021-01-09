@@ -24,7 +24,7 @@ func (s *SDK) Code2Session(req *Code2SessionReq) (*Code2SessionRsp, error) {
 		return nil, err
 	}
 
-	resp := new(Code2SessionRsp)
+	resp := &Code2SessionRsp{Response: &Response{}}
 	if err := s.getJson(r, resp); err != nil {
 		return nil, err
 	}
