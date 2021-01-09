@@ -21,7 +21,7 @@ func (s *SDK) Code2Session(req *Code2SessionReq) (*Code2SessionRsp, error) {
 	}
 	r, err := http.NewRequest(http.MethodGet, s.getURL("/sns/jscode2session", params), nil)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 
 	resp := new(Code2SessionRsp)
