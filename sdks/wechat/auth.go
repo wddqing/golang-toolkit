@@ -16,6 +16,8 @@ func (s *SDK) Code2Session(req *Code2SessionReq) (*Code2SessionRsp, error) {
 	params := map[string]string{
 		"js_code":    req.JsCode,
 		"grant_type": "authorization_code",
+		"appid":      s.AppId,
+		"secret":     s.AppSecret,
 	}
 	r, err := http.NewRequest(http.MethodGet, s.getURL("/sns/jscode2session", params), nil)
 	if err != nil {
