@@ -22,8 +22,9 @@ func (e *XGinEngine) Listen(addr string) error {
 }
 
 func NewGin(logger *zap.Logger) *XGinEngine {
-	e := gin.Default()
+	e := gin.New()
 
+	e.Use(gin.Recovery())
 	e.Use(ginzap.Ginzap(logger, time.RFC3339, true))
 	e.Use(ginzap.RecoveryWithZap(logger, true))
 
