@@ -30,6 +30,19 @@ func (r *StmtDB) DB() *sqlx.DB {
 	return r.db
 }
 
+func (r *StmtDB) Close() {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	for _, stmt := range r.stmts {
+		stmt.Close()
+	}
+	for _, stmt := range r.namedStmts {
+		stmt.Close()
+	}
+	r.db.Close()
+}
+
 func (r *StmtDB) Exec(sqlStr string, args []interface{}) (sql.Result, error) {
 	return r.db.Exec(sqlStr, args...)
 }

@@ -61,3 +61,7 @@ func (r *Repository) Get(sqlStr string, obj interface{}, args ...interface{}) er
 
 	return stmt.Get(obj, args...)
 }
+
+func (r *Repository) Close() {
+	r.stmtDB.Close()
+}
