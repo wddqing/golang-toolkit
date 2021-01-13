@@ -1,6 +1,10 @@
 package xgin
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
 
 func MakeMaxAllowedMiddleWare(n int) gin.HandlerFunc {
 	sem := make(chan struct{}, n)
@@ -11,5 +15,32 @@ func MakeMaxAllowedMiddleWare(n int) gin.HandlerFunc {
 		acquire()       // before request
 		defer release() // after request
 		c.Next()
+	}
+}
+
+func MakeMaxAllowedProtectMiddleWare(n int) gin.HandlerFunc {
+	sem := make(chan struct{}, n)
+	acquire := func() bool {
+		select {
+		case sem <- struct{}{}:
+			return true
+		default:
+			return false
+		}
+	}
+	release := func() {
+		select {
+		case <-sem:
+		default:
+		}
+	}
+
+	return func(c *gin.Context) {
+		if acquire() { // before request
+			defer release() // after request
+			c.Next()
+		} else {
+			c.AbortWithStatus(http.StatusGatewayTimeout)
+		}
 	}
 }
