@@ -1,8 +1,6 @@
 package xgin
 
 import (
-	"time"
-
 	ginzap "github.com/gin-contrib/zap"
 	"go.uber.org/zap"
 
@@ -25,7 +23,7 @@ func NewGin(logger *zap.Logger) *XGinEngine {
 	e := gin.New()
 
 	e.Use(gin.Recovery())
-	e.Use(ginzap.Ginzap(logger, time.RFC3339, true))
+	//e.Use(ginzap.Ginzap(logger, time.RFC3339, true))
 	e.Use(ginzap.RecoveryWithZap(logger, true))
 
 	return &XGinEngine{Engine: e}
